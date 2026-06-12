@@ -1,4 +1,5 @@
 import { AppShell } from "@/components/app-shell";
+import { ReportDraftGenerator } from "@/components/report-draft-generator";
 import { reportOutputs } from "@/lib/client-portal-data";
 
 export default function ReportsPage() {
@@ -30,6 +31,8 @@ export default function ReportsPage() {
           </article>
         ))}
       </section>
+
+      <ReportDraftGenerator />
     </AppShell>
   );
 }

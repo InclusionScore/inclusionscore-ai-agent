@@ -1,5 +1,6 @@
 import { AppShell } from "@/components/app-shell";
-import { assessmentPrograms } from "@/lib/client-portal-data";
+import { AssessmentWorkflow } from "@/components/assessment-workflow";
+import { WorkspaceSummary } from "@/components/workspace-summary";
 
 export default function AssessmentsPage() {
   return (
@@ -13,26 +14,8 @@ export default function AssessmentsPage() {
         <button className="primary-action">New assessment</button>
       </header>
 
-      <section className="panel">
-        <div className="data-table">
-          <div className="table-row table-head">
-            <span>Assessment</span>
-            <span>Status</span>
-            <span>Owner</span>
-            <span>Progress</span>
-            <span>Next step</span>
-          </div>
-          {assessmentPrograms.map((program) => (
-            <div className="table-row" key={program.name}>
-              <strong>{program.name}</strong>
-              <span className="status-chip">{program.status}</span>
-              <span>{program.owner}</span>
-              <span>{program.progress}%</span>
-              <span className="muted">{program.nextStep}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <WorkspaceSummary />
+      <AssessmentWorkflow />
     </AppShell>
   );
 }

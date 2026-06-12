@@ -94,6 +94,8 @@ textarea {
 }
 
 .content {
+  display: grid;
+  gap: 16px;
   padding: 24px;
 }
 
@@ -374,6 +376,182 @@ button,
   margin: 0;
 }
 
+.auth-panel,
+.report-builder,
+.agent-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.form-grid,
+.profile-grid,
+.draft-columns {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-grid label,
+.compact-label {
+  color: var(--muted);
+  display: grid;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.form-grid input,
+.form-grid select,
+.compact-label select,
+.chat-composer textarea {
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--foreground);
+  padding: 9px 10px;
+  text-transform: none;
+}
+
+.auth-status,
+.score-stack {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.profile-cell {
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+}
+
+.assessment-list {
+  display: grid;
+  gap: 12px;
+}
+
+.assessment-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.assessment-item h3 {
+  font-size: 18px;
+  margin: 10px 0 6px;
+}
+
+.assessment-meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.segmented-control {
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 4px;
+}
+
+.segment {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  min-height: 38px;
+}
+
+.segment.active {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--accent-strong);
+}
+
+.evidence-table .table-row {
+  grid-template-columns: 90px minmax(220px, 1fr) minmax(220px, 1fr) 150px 150px minmax(240px, 1fr);
+  min-width: 1120px;
+}
+
+.advisor-table .table-row {
+  grid-template-columns: 150px minmax(220px, 1fr) 110px 100px 90px minmax(260px, 1fr);
+  min-width: 980px;
+}
+
+.chat-log {
+  display: grid;
+  gap: 12px;
+  max-height: 460px;
+  overflow: auto;
+}
+
+.chat-message {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  max-width: 840px;
+  padding: 12px;
+}
+
+.chat-message.assistant {
+  background: #f2f7f6;
+}
+
+.chat-message.user {
+  background: var(--panel-strong);
+  justify-self: end;
+}
+
+.chat-message p {
+  margin: 0;
+}
+
+.chat-composer {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.report-draft {
+  display: grid;
+  gap: 16px;
+}
+
+.report-draft p {
+  margin: 6px 0 0;
+}
+
+.draft-columns h3 {
+  margin: 0 0 8px;
+}
+
+.draft-columns ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.sr-only {
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .split {
   display: grid;
   gap: 16px;
@@ -425,7 +603,11 @@ button,
   .dashboard-grid,
   .program-grid,
   .report-grid,
-  .portal-grid {
+  .portal-grid,
+  .form-grid,
+  .profile-grid,
+  .draft-columns,
+  .chat-composer {
     grid-template-columns: 1fr;
   }
 

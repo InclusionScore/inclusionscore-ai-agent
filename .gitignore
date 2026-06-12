@@ -1,0 +1,21 @@
+.DS_Store
+*.log
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Node and Next.js build outputs
+node_modules/
+.next/
+dist/
+coverage/
+tsconfig.tsbuildinfo
+
+# Local private source/reference material
+*.pdf
+*.docx
+*.xlsx
+*.zip
+

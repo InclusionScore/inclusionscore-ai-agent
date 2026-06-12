@@ -8,14 +8,18 @@
 
 # Node and Next.js build outputs
 node_modules/
+**/node_modules/
 .next/
+**/.next/
 dist/
+**/dist/
 coverage/
+**/coverage/
 tsconfig.tsbuildinfo
+**/tsconfig.tsbuildinfo
 
 # Local private source/reference material
 *.pdf
 *.docx
 *.xlsx
 *.zip
-

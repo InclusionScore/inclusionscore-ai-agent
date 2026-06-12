@@ -4,7 +4,7 @@
 
 - Vercel project name: `inclusionscore-ai-agent`
 - GitHub repository: `InclusionScore/inclusionscore-ai-agent`
-- Root directory: `inclusionscore-ai-agent`
+- Root directory: repository root
 - Framework preset: Next.js
 - Production branch: `main`
 - Preview deployments: enabled for pull requests

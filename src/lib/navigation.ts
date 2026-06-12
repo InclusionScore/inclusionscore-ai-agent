@@ -1,5 +1,7 @@
 export const portalNavigation = [
   { label: "Home", href: "/" },
+  { label: "Client Portal", href: "/client-portal" },
+  { label: "Advisor Portal", href: "/advisor-portal" },
   { label: "Work Queue", href: "/work-queue" },
   { label: "Assessments", href: "/assessments" },
   { label: "Controls", href: "/controls" },
@@ -9,7 +11,6 @@ export const portalNavigation = [
   { label: "Certification", href: "/certification" },
   { label: "Insurance", href: "/insurance" },
   { label: "Reports", href: "/reports" },
-  { label: "Agent", href: "/agent" },
+  { label: "AI DISM Advisor", href: "/agent" },
   { label: "Admin", href: "/admin" }
 ] as const;
-

@@ -231,10 +231,29 @@ button,
 }
 
 .program-grid,
-.report-grid {
+.report-grid,
+.portal-grid {
   display: grid;
   gap: 16px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.portal-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.portal-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  min-height: 140px;
+  padding: 18px;
+}
+
+.portal-card:hover {
+  border-color: var(--accent);
 }
 
 .program-card {
@@ -405,7 +424,8 @@ button,
   .split,
   .dashboard-grid,
   .program-grid,
-  .report-grid {
+  .report-grid,
+  .portal-grid {
     grid-template-columns: 1fr;
   }
 

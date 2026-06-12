@@ -1,4 +1,3 @@
-import { AppShell } from "@/components/app-shell";
 import {
   assessmentPrograms,
   clientMetrics,
@@ -10,9 +9,9 @@ import {
   serviceRequests
 } from "@/lib/client-portal-data";
 
-export default function Home() {
+export function ClientDashboard() {
   return (
-    <AppShell>
+    <>
       <header className="page-header">
         <div>
           <p className="eyebrow">Client Portal</p>
@@ -156,6 +155,6 @@ export default function Home() {
           </div>
         </section>
       </div>
-    </AppShell>
+    </>
   );
 }

@@ -25,8 +25,11 @@ export function AppShell({ children }: AppShellProps) {
           <div className="muted">Client Workspace • Acme Corp</div>
         </header>
         <div className="content">{children}</div>
+        <footer className="security-footer">
+          <span>Privacy and security: tenant-isolated workspaces, Supabase RLS, server-side AI calls, and audit logging for advisor and AI actions.</span>
+          <Link href="/admin">Review admin controls</Link>
+        </footer>
       </section>
     </main>
   );
 }
-

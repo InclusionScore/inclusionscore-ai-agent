@@ -51,7 +51,15 @@ function extractTextFromOpenAIResponse(payload: unknown) {
 }
 
 function parseDiagnosticResult(text: string) {
-  return JSON.parse(text) as DiagnosticDemoResult;
+  const trimmed = text.trim();
+  const fencedJson = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1];
+  const candidate = fencedJson || trimmed.match(/\{[\s\S]*\}/)?.[0] || trimmed;
+
+  try {
+    return JSON.parse(candidate) as DiagnosticDemoResult;
+  } catch {
+    throw new Error("The AI response could not be parsed into the required diagnostic format. Please run the diagnostic again.");
+  }
 }
 
 async function runOpenAIDiagnostic(organizationName: string, answers: DiagnosticAnswer[]) {
@@ -146,7 +154,37 @@ export async function POST(request: NextRequest) {
       throw new Error(`Could not create assessment: ${assessmentError.message}`);
     }
 
-    const { result, model } = await runOpenAIDiagnostic(organization.name, body.answers);
+    let result: DiagnosticDemoResult;
+    let model: string;
+
+    try {
+      const aiResponse = await runOpenAIDiagnostic(organization.name, body.answers);
+      result = aiResponse.result;
+      model = aiResponse.model;
+    } catch (aiError) {
+      await supabase
+        .from("assessments")
+        .update({
+          status: "advisor_review",
+          completed_at: new Date().toISOString()
+        })
+        .eq("id", assessment.id);
+
+      await supabase.from("audit_logs").insert({
+        tenant_id: organization.tenant_id,
+        organization_id: organization.id,
+        actor_user_id: user.id,
+        action: "diagnostic.ai_failed",
+        resource_type: "assessment",
+        resource_id: assessment.id,
+        summary: "AI DISM diagnostic failed before results could be saved.",
+        metadata: {
+          error: aiError instanceof Error ? aiError.message : "Unknown AI failure"
+        }
+      });
+
+      throw aiError;
+    }
     const averageLevel = Math.round(result.maturity_summary.overall_level * 10) / 10;
     const readinessPercent = Math.max(0, Math.min(100, Math.round((averageLevel / 5) * 100)));
     const highestSeverity = result.top_risks.some((risk) => risk.severity === "critical")

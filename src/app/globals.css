@@ -556,6 +556,32 @@ button:disabled {
   margin: 0;
 }
 
+.empty-state {
+  background: var(--panel);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  margin: 0;
+  padding: 10px;
+}
+
+.security-footer {
+  align-items: center;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 12px;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 12px 24px;
+}
+
+.security-footer a {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
 .report-draft {
   display: grid;
   gap: 16px;

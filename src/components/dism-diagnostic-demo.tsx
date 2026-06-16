@@ -46,6 +46,7 @@ export function DismDiagnosticDemo() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOrganizations, setIsLoadingOrganizations] = useState(true);
 
   const currentQuestion = diagnosticQuestions[currentQuestionIndex];
   const completedAnswers = useMemo(
@@ -74,6 +75,8 @@ export function DismDiagnosticDemo() {
         setSelectedOrganizationId((current) => current || nextOrganizations[0]?.id || "");
       } catch (caughtError) {
         setError(caughtError instanceof Error ? caughtError.message : "Could not load organizations.");
+      } finally {
+        setIsLoadingOrganizations(false);
       }
     }
 
@@ -190,8 +193,8 @@ export function DismDiagnosticDemo() {
           <p className="muted">{acmeWorkforceDemo.presenterContext}</p>
           <label>
             Select workspace
-            <select value={selectedOrganizationId} onChange={(event) => setSelectedOrganizationId(event.target.value)}>
-              <option value="">No organization selected</option>
+            <select disabled={isLoadingOrganizations} value={selectedOrganizationId} onChange={(event) => setSelectedOrganizationId(event.target.value)}>
+              <option value="">{isLoadingOrganizations ? "Loading organizations..." : "No organization selected"}</option>
               {organizations.map((organization) => (
                 <option key={organization.id} value={organization.id}>
                   {organization.name}
@@ -199,6 +202,9 @@ export function DismDiagnosticDemo() {
               ))}
             </select>
           </label>
+          {!isLoadingOrganizations && organizations.length === 0 ? (
+            <p className="empty-state">No organizations yet. Create Acme Workforce Demo to start the investor flow.</p>
+          ) : null}
           <div className="form-grid single">
             <label>
               New organization

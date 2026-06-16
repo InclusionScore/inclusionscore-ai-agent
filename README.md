@@ -34,6 +34,10 @@ ServiceNow-style workforce risk management platform for DISM consulting, standar
 
 The AI route uses OpenAI when `OPENAI_API_KEY` is configured and falls back to structured mocked advisor output when it is not.
 
+## Production Launch
+
+See [Production Readiness](docs/production-readiness.md) for deployment variables, Supabase migration order, RLS checks, audit logging, and the investor demo flow.
+
 ## Local Setup
 
 ```bash

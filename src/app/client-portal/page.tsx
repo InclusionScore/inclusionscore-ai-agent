@@ -6,6 +6,7 @@ import { ClientDashboardLiveResults } from "@/components/client-dashboard-live-r
 import { ClientMaturityDashboard } from "@/components/client-maturity-dashboard";
 import { DismDiagnosticDemo } from "@/components/dism-diagnostic-demo";
 import { EvidenceTable } from "@/components/evidence-table";
+import { InsurancePremiumEstimate } from "@/components/insurance-premium-estimate";
 import { WorkspaceSummary } from "@/components/workspace-summary";
 
 export default function ClientPortalPage() {
@@ -15,6 +16,7 @@ export default function ClientPortalPage() {
       <WorkspaceSummary />
       <ClientDashboard />
       <ClientMaturityDashboard />
+      <InsurancePremiumEstimate />
       <ClientDashboardLiveResults />
       <DismDiagnosticDemo />
       <AssessmentWorkflow />

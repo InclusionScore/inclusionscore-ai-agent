@@ -391,3 +391,133 @@ values
     'Fragmented evidence creates certification and advisory review risk.',
     'Required before the client can support a readiness claim.'
   );
+
+insert into insurance_profiles (
+  id,
+  tenant_id,
+  organization_id,
+  employee_count,
+  country,
+  region,
+  industry,
+  sector,
+  revenue_band,
+  workforce_maturity_score,
+  iso_30415_readiness,
+  iso_30201_readiness,
+  harassment_risk,
+  discrimination_risk,
+  retaliation_risk,
+  training_completion,
+  evidence_completeness,
+  advisor_review_status
+)
+values (
+  'a0000000-0000-4000-8000-000000000001',
+  '10000000-0000-4000-8000-000000000002',
+  '20000000-0000-4000-8000-000000000002',
+  4500,
+  'Canada',
+  'North America',
+  'Consulting and assurance',
+  'Professional Services',
+  '$1B-$5B',
+  2.1,
+  71,
+  64,
+  'medium',
+  'medium',
+  'low',
+  82,
+  68,
+  'in_review'
+)
+on conflict (organization_id) do nothing;
+
+insert into premium_estimates (
+  id,
+  tenant_id,
+  organization_id,
+  insurance_profile_id,
+  estimated_annual_premium,
+  low_range,
+  expected_range,
+  high_range,
+  confidence_level,
+  renewal_risk_indicator,
+  peer_benchmark_premium,
+  potential_savings_low,
+  potential_savings_high,
+  model_version
+)
+values (
+  'a0000000-0000-4000-8000-000000000002',
+  '10000000-0000-4000-8000-000000000002',
+  '20000000-0000-4000-8000-000000000002',
+  'a0000000-0000-4000-8000-000000000001',
+  97338,
+  79817,
+  97338,
+  124593,
+  'Medium',
+  'Elevated',
+  87261,
+  13627,
+  28228,
+  'mock-epl-v1'
+)
+on conflict (id) do nothing;
+
+insert into underwriting_factors (
+  id,
+  tenant_id,
+  organization_id,
+  premium_estimate_id,
+  label,
+  factor_value,
+  explanation
+)
+values
+  ('a0000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Base premium', 81000.00, '4,500 employees multiplied by workforce exposure rate.'),
+  ('a0000000-0000-4000-8000-000000000004', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Industry factor', 1.05, 'Consulting and assurance professional services exposure.'),
+  ('a0000000-0000-4000-8000-000000000005', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Region factor', 0.95, 'Canada / North America region adjustment.'),
+  ('a0000000-0000-4000-8000-000000000006', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Claims factor', 1.12, 'One minor prior EPL claim in the lookback period.'),
+  ('a0000000-0000-4000-8000-000000000007', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Maturity factor', 0.98, 'Workforce maturity score is 2.1 out of 3.'),
+  ('a0000000-0000-4000-8000-000000000008', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Readiness factor', 0.98, 'Average ISO 30415 and ISO 30201 readiness is 68%.'),
+  ('a0000000-0000-4000-8000-000000000009', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'Evidence factor', 1.00, 'Evidence completeness is 68%.')
+on conflict (id) do nothing;
+
+insert into claims_history (
+  id,
+  tenant_id,
+  organization_id,
+  claim_type,
+  claim_count,
+  severity,
+  lookback_period,
+  notes
+)
+values
+  ('a0000000-0000-4000-8000-000000000010', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'Employment practices', 1, 'minor', '3 years', 'Resolved matter; underwriting impact reduced by documented remediation.'),
+  ('a0000000-0000-4000-8000-000000000011', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'Harassment', 0, 'none', '3 years', 'No reported harassment claims in seeded demo profile.'),
+  ('a0000000-0000-4000-8000-000000000012', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'Retaliation', 0, 'none', '3 years', 'No reported retaliation claims in seeded demo profile.')
+on conflict (id) do nothing;
+
+insert into premium_recommendations (
+  id,
+  tenant_id,
+  organization_id,
+  premium_estimate_id,
+  recommendation_type,
+  title,
+  rationale,
+  potential_premium_impact,
+  priority,
+  source
+)
+values
+  ('a0000000-0000-4000-8000-000000000013', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'maturity_action', 'Complete ISO 30415 governance evidence package', 'Improves leadership accountability and certification readiness signal.', 'May reduce renewal concern by improving underwriting confidence.', 1, 'seed'),
+  ('a0000000-0000-4000-8000-000000000014', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'training_step', 'Raise manager training completion above 90%', 'Improves prevention evidence for harassment, discrimination, and retaliation risk.', 'May support preferred EPL risk tier.', 2, 'seed'),
+  ('a0000000-0000-4000-8000-000000000015', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'evidence_request', 'Centralize workforce risk evidence register', 'Improves evidence sufficiency, claim defensibility, and advisor review status.', 'Planning savings $13,627-$28,228.', 3, 'seed'),
+  ('a0000000-0000-4000-8000-000000000016', '10000000-0000-4000-8000-000000000002', '20000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000002', 'policy_update', 'Refresh anti-harassment, discrimination, retaliation, accommodation, and escalation policies', 'Aligns operating procedures with workforce risk controls and readiness evidence.', 'May reduce perceived control weakness at renewal.', 4, 'seed')
+on conflict (id) do nothing;

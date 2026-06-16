@@ -138,6 +138,11 @@ button,
   white-space: nowrap;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .primary-action {
   background: var(--accent);
   color: #fff;
@@ -516,10 +521,39 @@ button,
   margin: 0;
 }
 
+.advisor-output {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 12px;
+}
+
+.advisor-output h3 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.advisor-output ul,
+.advisor-output ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.advisor-output li {
+  margin: 4px 0;
+}
+
 .chat-composer {
   display: grid;
   gap: 10px;
   grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.error-text {
+  color: var(--risk);
+  font-weight: 700;
+  margin: 0;
 }
 
 .report-draft {

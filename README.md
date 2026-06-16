@@ -21,7 +21,15 @@ ServiceNow-style workforce risk management platform for DISM consulting, standar
 - Mocked AI DISM Advisor chat
 - Mocked report draft generator
 
-The app deploys without Supabase or OpenAI keys. When Supabase keys are configured, the browser client is available and the migrations define the MVP tables and RLS policies.
+## Backend Foundation
+
+- Supabase auth helpers for browser and server contexts
+- Tables for profiles, organizations, advisor-client access, assessments, evidence, tasks, audit logs, AI conversations, and AI messages
+- RLS policies built around tenant membership and advisor-client access
+- Server-only AI DISM Advisor route at `/api/ai/dism-advisor`
+- OpenAI is called only from the API route; the browser never receives `OPENAI_API_KEY`
+
+The AI route uses OpenAI when `OPENAI_API_KEY` is configured and falls back to structured mocked advisor output when it is not.
 
 ## Local Setup
 
@@ -31,3 +39,13 @@ npm run dev
 ```
 
 Copy `.env.example` to `.env.local` and provide Supabase/OpenAI credentials.
+
+Required production environment variables:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4.1-mini
+```

@@ -198,3 +198,135 @@ export type ReportDraft = {
   created_at: string;
   updated_at: string;
 };
+
+export type Profile = {
+  id: string;
+  tenant_id: string | null;
+  organization_id: string | null;
+  full_name: string | null;
+  title: string | null;
+  email: string | null;
+  avatar_url: string | null;
+  default_role: PlatformRole;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AdvisorClientAccess = {
+  id: string;
+  advisor_tenant_id: string;
+  client_tenant_id: string;
+  client_organization_id: string;
+  access_level: "read_only" | "review" | "manage";
+  status: "pending" | "active" | "paused" | "revoked";
+  approved_by: string | null;
+  approved_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Assessment = {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  workspace_id: string | null;
+  name: string;
+  standard_set: string[];
+  status: "not_started" | "in_progress" | "evidence_review" | "advisor_review" | "report_ready" | "complete";
+  scope: string;
+  current_domain: string | null;
+  maturity_score: number;
+  readiness_percent: number;
+  risk_level: "preferred" | "watchlist" | "high" | "critical";
+  created_by: string | null;
+  started_at: string;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Evidence = {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  assessment_id: string | null;
+  title: string;
+  description: string | null;
+  evidence_type: string;
+  mapped_concepts: string[];
+  mapped_standards: string[];
+  owner_name: string | null;
+  status: "requested" | "submitted" | "needs_review" | "accepted" | "rejected";
+  freshness: "unknown" | "current" | "stale" | "draft";
+  source_url: string | null;
+  storage_path: string | null;
+  due_date: string | null;
+  reviewer_notes: string | null;
+  submitted_by: string | null;
+  submitted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Task = {
+  id: string;
+  tenant_id: string;
+  organization_id: string;
+  assessment_id: string | null;
+  evidence_id: string | null;
+  title: string;
+  description: string | null;
+  domain: string | null;
+  mapped_concepts: string[];
+  owner_name: string | null;
+  owner_user_id: string | null;
+  status: "open" | "in_progress" | "blocked" | "advisor_review" | "complete" | "cancelled";
+  priority: "low" | "medium" | "high" | "critical";
+  implementation_phase: "plan" | "do" | "check" | "act";
+  required_evidence: string[];
+  risk_implication: string | null;
+  readiness_impact: string | null;
+  due_date: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AuditLog = {
+  id: string;
+  tenant_id: string | null;
+  organization_id: string | null;
+  actor_user_id: string | null;
+  action: string;
+  resource_type: string;
+  resource_id: string | null;
+  summary: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+};
+
+export type AiConversation = {
+  id: string;
+  tenant_id: string | null;
+  organization_id: string | null;
+  assessment_id: string | null;
+  title: string;
+  mode: string;
+  model: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AiMessage = {
+  id: string;
+  conversation_id: string;
+  tenant_id: string | null;
+  organization_id: string | null;
+  assessment_id: string | null;
+  role: "user" | "assistant" | "system" | "tool";
+  content: string;
+  structured_output: Record<string, unknown>;
+  created_by: string | null;
+  created_at: string;
+};

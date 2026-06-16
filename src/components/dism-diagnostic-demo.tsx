@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { diagnosticQuestions, type DiagnosticAnswer, type DiagnosticDemoResult } from "@/lib/agent/diagnostic-demo";
+import { acmeWorkforceDemo } from "@/lib/demo/acme-workforce-demo";
 
 type OrganizationOption = {
   id: string;
@@ -36,9 +37,9 @@ const answerStarters = [
 export function DismDiagnosticDemo() {
   const [organizations, setOrganizations] = useState<OrganizationOption[]>([]);
   const [selectedOrganizationId, setSelectedOrganizationId] = useState("");
-  const [organizationName, setOrganizationName] = useState("Acme Corp");
-  const [industry, setIndustry] = useState("Manufacturing");
-  const [employeeCountBand, setEmployeeCountBand] = useState("1,001-5,000");
+  const [organizationName, setOrganizationName] = useState<string>(acmeWorkforceDemo.organizationName);
+  const [industry, setIndustry] = useState<string>(acmeWorkforceDemo.industry);
+  const [employeeCountBand, setEmployeeCountBand] = useState<string>(acmeWorkforceDemo.employeeCountBand);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<DiagnosticResponse | null>(null);
@@ -92,7 +93,7 @@ export function DismDiagnosticDemo() {
           name: organizationName,
           industry,
           employeeCountBand,
-          headquartersCountry: "US"
+          headquartersCountry: acmeWorkforceDemo.headquartersCountry
         })
       });
       const payload = (await response.json()) as { organization?: OrganizationOption; error?: string };
@@ -119,6 +120,16 @@ export function DismDiagnosticDemo() {
 
   function moveQuestion(delta: number) {
     setCurrentQuestionIndex((current) => Math.max(0, Math.min(diagnosticQuestions.length - 1, current + delta)));
+  }
+
+  function loadInvestorDemoAnswers() {
+    setOrganizationName(acmeWorkforceDemo.organizationName);
+    setIndustry(acmeWorkforceDemo.industry);
+    setEmployeeCountBand(acmeWorkforceDemo.employeeCountBand);
+    setAnswers(acmeWorkforceDemo.answers);
+    setCurrentQuestionIndex(0);
+    setStatus("Investor demo answers loaded. Create/select the organization, then generate the AI action plan.");
+    setError("");
   }
 
   async function runDiagnostic() {
@@ -176,6 +187,7 @@ export function DismDiagnosticDemo() {
       <div className="diagnostic-layout">
         <aside className="diagnostic-sidebar">
           <h3>Organization</h3>
+          <p className="muted">{acmeWorkforceDemo.presenterContext}</p>
           <label>
             Select workspace
             <select value={selectedOrganizationId} onChange={(event) => setSelectedOrganizationId(event.target.value)}>
@@ -203,6 +215,9 @@ export function DismDiagnosticDemo() {
           </div>
           <button className="secondary-action" disabled={isLoading} onClick={createOrganization} type="button">
             Create organization
+          </button>
+          <button className="primary-action" disabled={isLoading} onClick={loadInvestorDemoAnswers} type="button">
+            Load investor demo answers
           </button>
         </aside>
 

@@ -698,6 +698,190 @@ button:disabled {
   font-weight: 700;
 }
 
+.maturity-dashboard {
+  display: grid;
+  gap: 16px;
+}
+
+.benchmark-filter-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+
+.benchmark-filter-grid label {
+  color: var(--muted);
+  display: grid;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.benchmark-filter-grid select {
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--foreground);
+  padding: 8px 10px;
+  text-transform: none;
+}
+
+.benchmark-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 16px;
+}
+
+.benchmark-bars {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.benchmark-bar,
+.domain-bar {
+  align-items: center;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 150px minmax(0, 1fr) 54px;
+}
+
+.toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.toggle-pill {
+  align-items: center;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--accent-strong);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 6px;
+  padding: 6px 9px;
+}
+
+.standard-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.standard-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+
+.standard-card h3 {
+  margin: 0;
+}
+
+.pie-chart {
+  align-items: center;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at center, var(--panel) 0 52%, transparent 53%),
+    conic-gradient(var(--pie-color) 0 var(--pie-value), var(--panel-strong) var(--pie-value) 100%);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  display: inline-flex;
+  font-weight: 700;
+  height: 74px;
+  justify-content: center;
+  width: 74px;
+}
+
+.domain-bars {
+  display: grid;
+  gap: 10px;
+}
+
+.domain-bar div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.radar-wrap {
+  display: grid;
+  min-height: 320px;
+  place-items: center;
+}
+
+.radar-wrap svg {
+  max-width: 320px;
+  width: 100%;
+}
+
+.radar-ring {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
+}
+
+.radar-ring.inner {
+  stroke-dasharray: 5 5;
+}
+
+.radar-fill {
+  fill: rgba(18, 107, 127, 0.25);
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.roadmap-map {
+  display: grid;
+  gap: 16px;
+}
+
+.roadmap-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.roadmap-item h3 {
+  margin: 8px 0 4px;
+}
+
+.roadmap-chain {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.roadmap-node {
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  min-height: 112px;
+  padding: 12px;
+  position: relative;
+}
+
+.roadmap-node:not(:last-child)::after {
+  color: var(--accent);
+  content: "→";
+  font-weight: 700;
+  position: absolute;
+  right: -12px;
+  top: 42%;
+}
+
 .report-draft {
   display: grid;
   gap: 16px;
@@ -909,6 +1093,10 @@ button:disabled {
   .dashboard-grid,
   .landing-hero,
   .landing-band,
+  .benchmark-filter-grid,
+  .benchmark-grid,
+  .standard-grid,
+  .roadmap-chain,
   .program-grid,
   .report-grid,
   .portal-grid,
@@ -922,6 +1110,18 @@ button:disabled {
   .result-grid,
   .flow-stepper {
     grid-template-columns: 1fr;
+  }
+
+  .benchmark-bar,
+  .domain-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-node:not(:last-child)::after {
+    bottom: -22px;
+    right: 50%;
+    top: auto;
+    transform: rotate(90deg);
   }
 
   .landing-nav {

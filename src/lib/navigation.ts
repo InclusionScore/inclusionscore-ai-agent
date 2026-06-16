@@ -2,6 +2,7 @@ export const portalNavigation = [
   { label: "Home", href: "/" },
   { label: "Client Portal", href: "/client-portal" },
   { label: "Maturity Dashboard", href: "/client-maturity" },
+  { label: "Workforce Risk Index", href: "/benchmarks/workforce-risk-index" },
   { label: "Advisor Portal", href: "/advisor-portal" },
   { label: "Work Queue", href: "/work-queue" },
   { label: "Assessments", href: "/assessments" },

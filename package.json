@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "import:sp500-index": "node scripts/import-sp500-workforce-index.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },

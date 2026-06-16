@@ -17,6 +17,7 @@ export default function Home() {
       <nav className="landing-nav" aria-label="Landing navigation">
         <strong>InclusionScore AI Agent</strong>
         <div>
+          <Link href="/research/workforce-risk-index">Research</Link>
           <Link href="/admin">Admin</Link>
           <Link className="primary-action" href="/client-portal">
             Launch demo
@@ -38,6 +39,9 @@ export default function Home() {
             </Link>
             <Link className="secondary-action" href="/reports">
               View reports
+            </Link>
+            <Link className="secondary-action" href="/research/workforce-risk-index">
+              Explore S&amp;P 500 index
             </Link>
           </div>
         </div>

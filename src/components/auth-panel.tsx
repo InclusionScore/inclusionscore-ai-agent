@@ -20,11 +20,35 @@ export function AuthPanel() {
   const supabaseEnabled = useMemo(() => isSupabaseConfigured(), []);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("iscore-auth");
-    if (saved) {
-      setAuthState(JSON.parse(saved) as AuthState);
+    async function loadAuthState() {
+      if (supabaseEnabled) {
+        const supabase = createSupabaseBrowserClient();
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+
+        if (user?.email) {
+          const nextState = {
+            email: user.email,
+            role,
+            mode: "supabase"
+          } satisfies AuthState;
+
+          window.localStorage.setItem("iscore-auth", JSON.stringify(nextState));
+          setAuthState(nextState);
+          setEmail(user.email);
+          return;
+        }
+      }
+
+      const saved = window.localStorage.getItem("iscore-auth");
+      if (saved) {
+        setAuthState(JSON.parse(saved) as AuthState);
+      }
     }
-  }, []);
+
+    loadAuthState();
+  }, [role, supabaseEnabled]);
 
   async function signIn() {
     setMessage("");
@@ -34,7 +58,7 @@ export function AuthPanel() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: window.location.origin
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/client-portal`
         }
       });
 
@@ -43,7 +67,7 @@ export function AuthPanel() {
         return;
       }
 
-      setMessage("Supabase magic link sent. Mock role remains active for demo permissions.");
+      setMessage("Magic link sent. Open it to continue the production demo flow.");
     }
 
     const nextState = {
@@ -56,7 +80,12 @@ export function AuthPanel() {
     setAuthState(nextState);
   }
 
-  function signOut() {
+  async function signOut() {
+    if (supabaseEnabled) {
+      const supabase = createSupabaseBrowserClient();
+      await supabase.auth.signOut();
+    }
+
     window.localStorage.removeItem("iscore-auth");
     setAuthState(null);
     setMessage("Signed out of the demo workspace.");
@@ -69,7 +98,7 @@ export function AuthPanel() {
         <h2>Role-based workspace access</h2>
         <p className="muted">
           {supabaseEnabled
-            ? "Supabase auth is configured. The MVP sends a magic link and uses the selected role for demo access."
+            ? "Supabase auth is configured. Sign in with a magic link to create organizations and save diagnostic results."
             : "Supabase keys are not configured, so this run uses mocked auth with the same role model."}
         </p>
       </div>

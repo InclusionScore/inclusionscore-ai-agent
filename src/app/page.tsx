@@ -1,39 +1,70 @@
 import Link from "next/link";
-import { AppShell } from "@/components/app-shell";
 
-const demoLinks = [
-  { label: "Client Portal", href: "/client-portal", description: "Client dashboard, work queue, evidence, and service requests." },
-  { label: "Advisor Portal", href: "/advisor-portal", description: "Portfolio oversight and advisor delivery workflow." },
-  { label: "Assessments", href: "/assessments", description: "DISM diagnostics, maturity, certification, and EPL readiness." },
-  { label: "Evidence", href: "/evidence", description: "Evidence health, sufficiency, freshness, and standards mapping." },
-  { label: "Risks", href: "/risks", description: "Workforce risk indicators and treatment planning." },
-  { label: "Reports", href: "/reports", description: "Executive, certification, and underwriting report outputs." },
-  { label: "AI DISM Advisor", href: "/agent", description: "Mocked consultant guidance and action recommendations." }
+const demoSteps = [
+  "Login",
+  "Create organization",
+  "Start DISM Diagnostic",
+  "AI Advisor Q&A",
+  "Maturity Summary",
+  "Tasks",
+  "Evidence Requests",
+  "Download Report"
 ] as const;
 
 export default function Home() {
   return (
-    <AppShell>
-      <header className="page-header">
+    <main className="landing-page">
+      <nav className="landing-nav" aria-label="Landing navigation">
+        <strong>InclusionScore AI Agent</strong>
         <div>
-          <p className="eyebrow">InclusionScore AI Agent</p>
-          <h1>Workforce Risk Management Demo</h1>
-          <p className="muted">A mocked ServiceNow-style demo for DISM workflows, certification readiness, evidence, risk, reports, and advisor guidance.</p>
-        </div>
-        <div className="header-actions">
-          <Link className="secondary-action" href="/agent">Open AI advisor</Link>
-          <Link className="primary-action" href="/client-portal">Open client portal</Link>
-        </div>
-      </header>
-
-      <section className="portal-grid">
-        {demoLinks.map((link) => (
-          <Link className="portal-card" href={link.href} key={link.href}>
-            <strong>{link.label}</strong>
-            <span className="muted">{link.description}</span>
+          <Link href="/admin">Admin</Link>
+          <Link className="primary-action" href="/client-portal">
+            Launch demo
           </Link>
-        ))}
+        </div>
+      </nav>
+
+      <section className="landing-hero">
+        <div>
+          <p className="eyebrow">ServiceNow for Workforce Risk Management</p>
+          <h1>Turn DISM advisory conversations into evidence, tasks, maturity scores, and board-ready action plans.</h1>
+          <p className="landing-copy">
+            A production-ready customer demo that moves from login to organization setup, AI-guided DISM diagnostic, ISO 30415 and ISO 30201 mapping,
+            implementation tasks, evidence requests, and a downloadable readiness report.
+          </p>
+          <div className="header-actions">
+            <Link className="primary-action" href="/client-portal">
+              Start production demo
+            </Link>
+            <Link className="secondary-action" href="/reports">
+              View reports
+            </Link>
+          </div>
+        </div>
+        <aside className="landing-panel">
+          <h2>Demo Path</h2>
+          <ol className="landing-steps">
+            {demoSteps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </aside>
       </section>
-    </AppShell>
+
+      <section className="landing-band">
+        <article>
+          <h2>Secure by design</h2>
+          <p>Supabase auth, tenant-isolated Row Level Security, explicit advisor-client access, and audit logs for AI and advisor workflow actions.</p>
+        </article>
+        <article>
+          <h2>Advisor-grade output</h2>
+          <p>The AI does more than chat. It diagnoses, asks follow-ups, maps to standards, identifies maturity gaps, and creates implementation work.</p>
+        </article>
+        <article>
+          <h2>Customer-ready flow</h2>
+          <p>The guided demo is intentionally linear so a real customer can complete a first Workforce Risk / DISM diagnostic in one session.</p>
+        </article>
+      </section>
+    </main>
   );
 }

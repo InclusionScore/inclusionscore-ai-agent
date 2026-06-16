@@ -26,6 +26,15 @@ export type BenchmarkFilter = {
   maturityDomain: string;
 };
 
+export type BenchmarkComparison = {
+  client: string;
+  maturityScore: number;
+  peerAverage: number;
+  topQuartile: number;
+  gapToBenchmark: number;
+  recommendedNextActions: string[];
+};
+
 export type RoadmapItem = {
   standard: string;
   domain: string;
@@ -36,6 +45,15 @@ export type RoadmapItem = {
   owner: string;
   dueDate: string;
   aiRecommendation: string;
+};
+
+export type MaturityDashboardData = {
+  benchmarkFilters: BenchmarkFilter;
+  benchmarkComparison: BenchmarkComparison;
+  maturityStandards: MaturityStandard[];
+  roadmapItems: RoadmapItem[];
+  topRecommendedActions: string[];
+  source: "mock" | "supabase";
 };
 
 export const maturityLevelLabels: Record<MaturityLevel, string> = {
@@ -185,3 +203,12 @@ export const topRecommendedActions = [
   "Use quarterly management review to prove controls are operating.",
   "Prepare an advisor review package for certification readiness."
 ];
+
+export const mockedMaturityDashboard: MaturityDashboardData = {
+  benchmarkFilters,
+  benchmarkComparison,
+  maturityStandards,
+  roadmapItems,
+  topRecommendedActions,
+  source: "mock"
+};

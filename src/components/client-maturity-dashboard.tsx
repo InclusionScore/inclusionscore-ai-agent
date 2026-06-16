@@ -1,23 +1,39 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
-  benchmarkComparison,
-  benchmarkFilters,
   maturityLevelLabels,
-  maturityStandards,
-  roadmapItems,
-  topRecommendedActions,
+  mockedMaturityDashboard,
+  type MaturityDashboardData,
   type MaturityStandard
 } from "@/lib/maturity/mock-data";
 
 export function ClientMaturityDashboard() {
+  const [dashboardData, setDashboardData] = useState<MaturityDashboardData>(mockedMaturityDashboard);
+  const [isLoading, setIsLoading] = useState(true);
   const [enabledStandards, setEnabledStandards] = useState<Record<string, boolean>>(
-    Object.fromEntries(maturityStandards.map((standard) => [standard.id, standard.enabled]))
+    Object.fromEntries(mockedMaturityDashboard.maturityStandards.map((standard) => [standard.id, standard.enabled]))
   );
 
-  const activeStandards = useMemo(() => maturityStandards.filter((standard) => enabledStandards[standard.id]), [enabledStandards]);
+  useEffect(() => {
+    async function loadMaturityDashboard() {
+      try {
+        const response = await fetch("/api/maturity/dashboard");
+        const payload = (await response.json()) as MaturityDashboardData;
+        if (response.ok) {
+          setDashboardData(payload);
+          setEnabledStandards(Object.fromEntries(payload.maturityStandards.map((standard) => [standard.id, standard.enabled])));
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadMaturityDashboard();
+  }, []);
+
+  const activeStandards = useMemo(() => dashboardData.maturityStandards.filter((standard) => enabledStandards[standard.id]), [dashboardData, enabledStandards]);
   const radarPoints = useMemo(() => buildRadarPoints(activeStandards), [activeStandards]);
 
   function toggleStandard(id: string) {
@@ -32,12 +48,13 @@ export function ClientMaturityDashboard() {
       <header className="page-header">
         <div>
           <p className="eyebrow">Client Maturity Dashboard</p>
-          <h1>{benchmarkComparison.client}</h1>
+          <h1>{dashboardData.benchmarkComparison.client}</h1>
           <p className="muted">
             Benchmark maturity, multi-standard readiness, execution roadmap, and AI next-best actions for workforce governance.
           </p>
         </div>
         <div className="header-actions">
+          <span className="status-chip">{isLoading ? "Loading" : dashboardData.source}</span>
           <a className="secondary-action" href="#maturity-roadmap">
             View roadmap
           </a>
@@ -47,7 +64,7 @@ export function ClientMaturityDashboard() {
         </div>
       </header>
 
-      <BenchmarkComparison />
+      <BenchmarkComparison data={dashboardData} />
 
       <section className="panel panel-wide">
         <div className="section-heading">
@@ -56,7 +73,7 @@ export function ClientMaturityDashboard() {
             <p className="muted">Toggle standards on or off based on the client’s scope.</p>
           </div>
           <div className="toggle-row" aria-label="Standard toggles">
-            {maturityStandards.map((standard) => (
+            {dashboardData.maturityStandards.map((standard) => (
               <label className="toggle-pill" key={standard.id}>
                 <input checked={enabledStandards[standard.id]} onChange={() => toggleStandard(standard.id)} type="checkbox" />
                 {standard.name}
@@ -103,7 +120,7 @@ export function ClientMaturityDashboard() {
             </div>
           </div>
           <div className="recommendation-list">
-            {topRecommendedActions.map((action, index) => (
+            {dashboardData.topRecommendedActions.map((action, index) => (
               <div className="recommendation" key={action}>
                 <span className="pill">Priority {index + 1}</span>
                 <strong>{action}</strong>
@@ -113,20 +130,20 @@ export function ClientMaturityDashboard() {
         </section>
       </section>
 
-      <MaturityRoadmap />
+      <MaturityRoadmap data={dashboardData} />
     </section>
   );
 }
 
-function BenchmarkComparison() {
+function BenchmarkComparison({ data }: { data: MaturityDashboardData }) {
   const filters = [
-    ["Sector", benchmarkFilters.sector],
-    ["Industry", benchmarkFilters.industry],
-    ["Region", benchmarkFilters.region],
-    ["Country", benchmarkFilters.country],
-    ["Company size", benchmarkFilters.companySize],
-    ["Standard", benchmarkFilters.standard],
-    ["Maturity domain", benchmarkFilters.maturityDomain]
+    ["Sector", data.benchmarkFilters.sector],
+    ["Industry", data.benchmarkFilters.industry],
+    ["Region", data.benchmarkFilters.region],
+    ["Country", data.benchmarkFilters.country],
+    ["Company size", data.benchmarkFilters.companySize],
+    ["Standard", data.benchmarkFilters.standard],
+    ["Maturity domain", data.benchmarkFilters.maturityDomain]
   ] as const;
 
   return (
@@ -151,20 +168,20 @@ function BenchmarkComparison() {
       </div>
 
       <div className="benchmark-grid">
-        <BenchmarkMetric label="Client maturity" value={benchmarkComparison.maturityScore} />
-        <BenchmarkMetric label="Peer average" value={benchmarkComparison.peerAverage} />
-        <BenchmarkMetric label="Top quartile" value={benchmarkComparison.topQuartile} />
-        <BenchmarkMetric label="Gap to top quartile" value={benchmarkComparison.gapToBenchmark} tone="warning" />
+        <BenchmarkMetric label="Client maturity" value={data.benchmarkComparison.maturityScore} />
+        <BenchmarkMetric label="Peer average" value={data.benchmarkComparison.peerAverage} />
+        <BenchmarkMetric label="Top quartile" value={data.benchmarkComparison.topQuartile} />
+        <BenchmarkMetric label="Gap to top quartile" value={data.benchmarkComparison.gapToBenchmark} tone="warning" />
       </div>
 
       <div className="benchmark-bars">
-        <BenchmarkBar label="Client" value={benchmarkComparison.maturityScore} />
-        <BenchmarkBar label="Peer average" value={benchmarkComparison.peerAverage} />
-        <BenchmarkBar label="Top quartile" value={benchmarkComparison.topQuartile} />
+        <BenchmarkBar label="Client" value={data.benchmarkComparison.maturityScore} />
+        <BenchmarkBar label="Peer average" value={data.benchmarkComparison.peerAverage} />
+        <BenchmarkBar label="Top quartile" value={data.benchmarkComparison.topQuartile} />
       </div>
 
       <div className="recommendation-list">
-        {benchmarkComparison.recommendedNextActions.map((action) => (
+        {data.benchmarkComparison.recommendedNextActions.map((action) => (
           <div className="recommendation" key={action}>
             <span className="pill">Next action</span>
             <strong>{action}</strong>
@@ -231,7 +248,7 @@ function StandardMaturityCard({ standard }: { standard: MaturityStandard }) {
   );
 }
 
-function MaturityRoadmap() {
+function MaturityRoadmap({ data }: { data: MaturityDashboardData }) {
   return (
     <section className="panel panel-wide" id="maturity-roadmap">
       <div className="section-heading">
@@ -242,7 +259,7 @@ function MaturityRoadmap() {
       </div>
 
       <div className="roadmap-map">
-        {roadmapItems.map((item) => (
+        {data.roadmapItems.map((item) => (
           <article className="roadmap-item" key={`${item.standard}-${item.domain}`}>
             <div>
               <span className="pill">{item.standard}</span>

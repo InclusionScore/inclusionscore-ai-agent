@@ -26,6 +26,9 @@ ServiceNow-style workforce risk management platform for DISM consulting, standar
 - Supabase auth helpers for browser and server contexts
 - Tables for profiles, organizations, advisor-client access, assessments, evidence, tasks, audit logs, AI conversations, and AI messages
 - RLS policies built around tenant membership and advisor-client access
+- Organization data is tenant-isolated by default
+- Advisors can read client organizations only through explicit `advisor_client_access` assignments
+- Database audit triggers log advisor access changes, assessments, evidence, tasks, AI conversations, and AI messages
 - Server-only AI DISM Advisor route at `/api/ai/dism-advisor`
 - OpenAI is called only from the API route; the browser never receives `OPENAI_API_KEY`
 

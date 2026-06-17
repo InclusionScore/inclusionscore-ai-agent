@@ -18,22 +18,23 @@ import type { WorkforceIndexCompany } from "@/lib/workforce-index/sp500-index-da
 
 type WorkforceRiskIndexDashboardProps = {
   mode: "public" | "benchmark";
+  companies?: WorkforceIndexCompany[];
+  source?: "supabase" | "local";
 };
 
-const allCompanies = getWorkforceIndexCompanies();
-
-export function WorkforceRiskIndexDashboard({ mode }: WorkforceRiskIndexDashboardProps) {
+export function WorkforceRiskIndexDashboard({ companies, mode, source = "local" }: WorkforceRiskIndexDashboardProps) {
+  const allCompanies = useMemo(() => (companies?.length ? companies : getWorkforceIndexCompanies()), [companies]);
   const [sector, setSector] = useState("All");
   const [industry, setIndustry] = useState("All");
-  const [companyTicker, setCompanyTicker] = useState("AAPL");
+  const [companyTicker, setCompanyTicker] = useState(allCompanies.find((company) => company.ticker === "AAPL")?.ticker || allCompanies[0]?.ticker || "");
   const [maturityCategory, setMaturityCategory] = useState("All");
   const [activeDomain, setActiveDomain] = useState<WorkforceIndexDomainKey | "overall">("overall");
 
-  const sectors = useMemo(() => ["All", ...uniqueSorted(allCompanies.map((company) => company.sector))], []);
+  const sectors = useMemo(() => ["All", ...uniqueSorted(allCompanies.map((company) => company.sector))], [allCompanies]);
   const industries = useMemo(() => {
     const scopedCompanies = sector === "All" ? allCompanies : allCompanies.filter((company) => company.sector === sector);
     return ["All", ...uniqueSorted(scopedCompanies.map((company) => company.industry))];
-  }, [sector]);
+  }, [allCompanies, sector]);
 
   const filteredCompanies = useMemo(() => {
     return allCompanies.filter((company) => {
@@ -42,10 +43,10 @@ export function WorkforceRiskIndexDashboard({ mode }: WorkforceRiskIndexDashboar
       const maturityMatch = maturityCategory === "All" || company.maturityCategory === maturityCategory;
       return sectorMatch && industryMatch && maturityMatch;
     });
-  }, [industry, maturityCategory, sector]);
+  }, [allCompanies, industry, maturityCategory, sector]);
 
-  const selectedCompany = useMemo(() => allCompanies.find((company) => company.ticker === companyTicker) || allCompanies[0], [companyTicker]);
-  const sectorPeers = useMemo(() => allCompanies.filter((company) => company.sector === selectedCompany.sector), [selectedCompany]);
+  const selectedCompany = useMemo(() => allCompanies.find((company) => company.ticker === companyTicker) || allCompanies[0], [allCompanies, companyTicker]);
+  const sectorPeers = useMemo(() => allCompanies.filter((company) => company.sector === selectedCompany.sector), [allCompanies, selectedCompany]);
   const rankedCompanies = useMemo(() => [...filteredCompanies].sort((a, b) => b.inclusionScore - a.inclusionScore || a.company.localeCompare(b.company)), [filteredCompanies]);
   const distribution = useMemo(() => buildDistribution(filteredCompanies), [filteredCompanies]);
   const sectorBars = useMemo(() => buildSectorBars(filteredCompanies), [filteredCompanies]);
@@ -65,7 +66,7 @@ export function WorkforceRiskIndexDashboard({ mode }: WorkforceRiskIndexDashboar
         <div className="index-summary-card">
           <span className="muted">Public dataset v1</span>
           <strong>{allCompanies.length}</strong>
-          <span>deduplicated companies</span>
+          <span>{source === "supabase" ? "companies from Supabase" : "deduplicated companies"}</span>
         </div>
       </header>
 
@@ -199,7 +200,7 @@ export function WorkforceRiskIndexDashboard({ mode }: WorkforceRiskIndexDashboar
       </section>
 
       <section className="dashboard-grid">
-        <CompanyComparison company={selectedCompany} sectorPeers={sectorPeers} activeDomain={activeDomain} />
+        <CompanyComparison company={selectedCompany} sectorPeers={sectorPeers} activeDomain={activeDomain} marketCompanies={allCompanies} />
         <section className="panel">
           <div className="section-heading compact">
             <h2>Core Categories</h2>
@@ -279,15 +280,17 @@ function IndexKpi({ label, note, value }: { label: string; note: string; value: 
 function CompanyComparison({
   activeDomain,
   company,
+  marketCompanies,
   sectorPeers
 }: {
   activeDomain: WorkforceIndexDomainKey | "overall";
   company: WorkforceIndexCompany;
+  marketCompanies: WorkforceIndexCompany[];
   sectorPeers: WorkforceIndexCompany[];
 }) {
   const companyScore = activeDomain === "overall" ? company.inclusionScore : company[activeDomain];
   const sectorAverage = activeDomain === "overall" ? overallAverage(sectorPeers) : domainAverage(sectorPeers, activeDomain);
-  const marketAverage = activeDomain === "overall" ? overallAverage(allCompanies) : domainAverage(allCompanies, activeDomain);
+  const marketAverage = activeDomain === "overall" ? overallAverage(marketCompanies) : domainAverage(marketCompanies, activeDomain);
   const denominator = activeDomain === "overall" ? 8 : 2;
 
   return (
